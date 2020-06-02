@@ -28,12 +28,18 @@ import es.uv.twcam.projects.airproject.entity.Aircraft;
 import es.uv.twcam.projects.airproject.entity.Airline;
 import es.uv.twcam.projects.airproject.entity.Airport;
 import es.uv.twcam.projects.airproject.entity.Flight;
+import es.uv.twcam.projects.airproject.entity.Person;
+import es.uv.twcam.projects.airproject.entity.Reservation;
+import es.uv.twcam.projects.airproject.entity.Seat;
 import es.uv.twcam.projects.airproject.repositoryDAO.DataDAOFactory;
 import es.uv.twcam.projects.airproject.repositoryDAO.DataDAOFactory.TYPE;
 import es.uv.twcam.projects.airproject.service.IAircraftDAO;
 import es.uv.twcam.projects.airproject.service.IAirlineDAO;
 import es.uv.twcam.projects.airproject.service.IAirportDAO;
 import es.uv.twcam.projects.airproject.service.IFlightDAO;
+import es.uv.twcam.projects.airproject.service.IPersonDAO;
+import es.uv.twcam.projects.airproject.service.IReservationDAO;
+import es.uv.twcam.projects.airproject.service.ISeatDAO;
 /**
 *
 * @author danilosalaz
@@ -80,9 +86,17 @@ public class UtilsData {
 //			insertAircrafts(airDAOs, br);
 			
 //			//Vuelos
-			fileCSV = new File("datasets-flights.csv");
+//			fileCSV = new File("datasets-flights.csv");
+//			br = new BufferedReader(new FileReader(fileCSV));
+//			insertFlights(airDAOs, br);
+			
+			
+			//Personas
+			fileCSV = new File("datasets-nombres.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
-			insertFlights(airDAOs, br);
+			fileCSV = new File("datasets-apellidos.csv");
+			BufferedReader br2 = new BufferedReader(new FileReader(fileCSV));
+			insertarPersonas(airDAOs, br,br2);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -96,6 +110,35 @@ public class UtilsData {
 		
 	   
 
+	}
+//	public static void insertarReservaciones(DataDAOFactory airDAOs) {
+//		IReservationDAO reserRepo = airDAOs.getReservationDAO();
+//		Reservation reser = new Reservation(type, fligths)
+//		
+//	}
+	public static void insertarPersonas(DataDAOFactory airDAOs, BufferedReader br, BufferedReader br2) throws IOException {
+		IPersonDAO personasRepo = airDAOs.getPersonDAO();
+		int dni1;
+		int dni2;
+		int dni3;
+		int count = 0;
+		String dni;
+		String nombre;
+		String apellido;
+		br.readLine();
+		br2.readLine();
+		while((nombre = br.readLine()) != null && (apellido = br2.readLine()) != null &&  count < 50 ) {
+			dni1 = (int) ((int) 111 + Math.random() * (444 - 111));
+			dni2 = (int) ((int) 222 + Math.random() * (777 - 222));
+			dni3 = (int) ((int) 11 + Math.random() * (99 - 11));
+			dni = dni1 + "" + dni2 + "" + dni3 + "N";
+			personasRepo.createPerson(new Person(dni,nombre.split(",")[0], apellido.split(",")[0]));
+			count++;
+			
+		}
+		br.close();
+		br2.close();
+		
 	}
 	public static void insertAirlines(DataDAOFactory airDAOs, BufferedReader br) throws IOException {
 		String st;
@@ -158,13 +201,13 @@ public class UtilsData {
 		Aircraft aircraft;
 		
 		airportVLC = airpRepo.findAirportByIATACode("VLC");
-//		List<Flight> listFLights = new ArrayList<Flight>();
+		List<Flight> listFLights = new ArrayList<Flight>();
 		br.readLine();
 		
 		String st = "";
 		int count = 0;
 		try {
-			while((st = br.readLine()) != null && count < 2000) {
+			while((st = br.readLine()) != null && count < 1000) {
 				String[] res = st.split(",");
 				LocalDate dateRes = LocalDate.now();
 //				int year = res[0] !=  null && !res[0].equals("") ? Integer.parseInt(res[0]): ;
@@ -181,18 +224,20 @@ public class UtilsData {
 				float boggageCost = (float) (50 + Math.random() * (150 - 50));
 				float priorityCost = (float) (100 + Math.random() * (200 - 100));
 				
-				airportOrigin = count < 1000 ? airportVLC: airpRepo.findAirportByIATACode(originAirport);
-				aiportDestin = count >= 1000 ? airportVLC: airpRepo.findAirportByIATACode(destinationAirport);
+				airportOrigin = count < 500 ? airportVLC: airpRepo.findAirportByIATACode(originAirport);
+				aiportDestin = count >= 500 ? airportVLC: airpRepo.findAirportByIATACode(destinationAirport);
 				airline = airlRepo.findAirlineByIATACode(codeAirline);
 				aircraft = aircRepo.findAircraftByName(codeAircraft);
 				
-				fligRepo.createFlight(new Flight(dateRes, 2020 ,month,day,departureTime, boardingTime,airTime, 500, cost,priorityCost,
-				boggageCost, airline, aiportDestin,  airportOrigin, aircraft));
-//				listFLights.add(new Flight(dateRes, 2020,month,day,departureTime, boardingTime,airTime, 0, cost,priorityCost,
-//				boggageCost, State.schedule, airline, aiportDestin,  airportOrigin, aircraft));
+				Flight flight =new Flight(dateRes, 2020 ,month,day,departureTime, boardingTime,airTime, 50, cost,priorityCost,
+						boggageCost, airline, aiportDestin,  airportOrigin, aircraft);
+				
+				fligRepo.createFlight(flight);
+				listFLights.add(flight);
 				count++;
 			}
 			br.close();
+			insertarSeats(airDAOs,listFLights);
 			//listFLights.forEach(System.out::println);
 			
 		} catch (NumberFormatException e) {
@@ -201,6 +246,36 @@ public class UtilsData {
 			System.out.println("Fallo en la fila : " + count);
 			System.out.println(st.toString());
 		}
+		
+		
+	}
+	public static void insertarSeats(DataDAOFactory airDAOs, List<Flight> listFlights) {
+		ISeatDAO seatRepo = airDAOs.getSeatDAO();
+		
+		int number = 1;
+		String codeSeat = "";
+		for(Flight flight: listFlights) {
+			number = 1;
+			for (int i = 0; i < 4; i++) {
+				codeSeat = number + "A" ;
+				seatRepo.createSeat(new Seat(codeSeat,flight,true));
+				
+				codeSeat = number + "B" ;
+				seatRepo.createSeat(new Seat(codeSeat,flight,true));
+				
+				codeSeat = number + "C" ;
+				seatRepo.createSeat(new Seat(codeSeat,flight,true));
+				
+				codeSeat = number + "D" ;
+				seatRepo.createSeat(new Seat(codeSeat,flight,true));
+				
+				codeSeat = number + "E" ;
+				seatRepo.createSeat(new Seat(codeSeat,flight,true));
+				
+				number++;
+			}
+		}
+		
 		
 		
 	}

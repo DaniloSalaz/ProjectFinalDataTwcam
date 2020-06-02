@@ -23,8 +23,11 @@ public class Seat {
 	private String code;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name ="fk_airc_id")
-	private Aircraft aircraft;
+	@JoinColumn(name ="fk_flig_id")
+	private Flight flight;
+	
+	@Column(name = "seat_available")
+	private boolean available;
 	
 	public Seat() {
 		
@@ -33,6 +36,13 @@ public class Seat {
 	public Seat(String code) {
 		super();
 		this.code = code;
+	}
+
+	public Seat(String code, Flight flight, boolean available) {
+		super();
+		this.code = code;
+		this.flight = flight;
+		this.available = available;
 	}
 
 	public int getId() {
@@ -51,12 +61,20 @@ public class Seat {
 		this.code = code;
 	}
 
-	public Aircraft getAircraft() {
-		return aircraft;
+	public Flight getFlight() {
+		return flight;
 	}
 
-	public void setAircraft(Aircraft aircraft) {
-		this.aircraft = aircraft;
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 	
 	

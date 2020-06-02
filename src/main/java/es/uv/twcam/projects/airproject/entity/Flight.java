@@ -1,6 +1,7 @@
 package es.uv.twcam.projects.airproject.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -72,6 +74,9 @@ public class Flight {
 	@ManyToOne
 	@JoinColumn(name = "fk_airc_id", updatable = false)
 	private Aircraft aircraft;
+	
+	@OneToMany(mappedBy = "flight")
+	private List<Seat> seats;
 	
 
 	public Flight() {

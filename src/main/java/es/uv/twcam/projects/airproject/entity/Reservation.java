@@ -45,7 +45,7 @@ public class Reservation {
 	private Payment payment;
 	
 	@OneToMany(mappedBy = "reservation")
-	private List<FlightReservation> fligths;
+	private List<FlightReservation> flights;
 	
 	@OneToMany(mappedBy = "reservation")
 	private List<PassegerReservation> passeger;
@@ -65,12 +65,34 @@ public class Reservation {
 	public Reservation() {
 		
 	}
-	
-	public Reservation(ReservationType type, List<FlightReservation> fligths) {
+
+	public Reservation(ReservationType type, Person person, Payment payment, List<FlightReservation> flights,
+			List<PassegerReservation> passeger, List<Seat> seatsReservation) {
 		super();
 		this.type = type;
-		this.fligths = fligths;
+		this.person = person;
+		this.payment = payment;
+		this.flights = flights;
+		this.passeger = passeger;
+		this.seatsReservation = seatsReservation;
 	}
+
+
+
+	public Reservation(ReservationType type, int baggageNo, int prioriryNo, Person person, Payment payment,
+			List<FlightReservation> flights, List<PassegerReservation> passeger, List<Seat> seatsReservation) {
+		super();
+		this.type = type;
+		this.baggageNo = baggageNo;
+		this.prioriryNo = prioriryNo;
+		this.person = person;
+		this.payment = payment;
+		this.flights = flights;
+		this.passeger = passeger;
+		this.seatsReservation = seatsReservation;
+	}
+
+
 
 	public int getId() {
 		return id;
@@ -96,12 +118,12 @@ public class Reservation {
 		this.baggageNo = baggageNo;
 	}
 	
-	public List<FlightReservation> getFligths() {
-		return fligths;
+	public List<FlightReservation> getFlights() {
+		return flights;
 	}
 
-	public void setFligths(List<FlightReservation> fligths) {
-		this.fligths = fligths;
+	public void setFlights(List<FlightReservation> flights) {
+		this.flights = flights;
 	}
 
 	public Person getPerson() {
