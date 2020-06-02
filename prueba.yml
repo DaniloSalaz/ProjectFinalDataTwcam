@@ -1,0 +1,32 @@
+AircraftDAO:
+ - CRUD: Aircraft
+ - name: deteleById
+   arguments:
+    - id: int
+ - name: findAircraftByName
+   return: Aircraft
+   arguments:
+    - name: String
+AirlineDAO:
+ - CRUD: Airline
+ - name: deteleById
+   arguments:
+    - id: int
+ - name: findAirlineByIATACode
+   return: Airline
+   arguments:
+    - iataCode: String
+AirportDAO:
+ - CRUD: Airport
+ - name: findAirportByIATACode
+   return: Airport
+   arguments:
+    - iataCode: String
+FlightDAO:
+ - CRUD: Flight
+PersonDAO:
+ - CRUD: Person
+ReservationDAO:
+ - CRUD: Reservation
+SeatDAO:
+ - CRUD: Seat
