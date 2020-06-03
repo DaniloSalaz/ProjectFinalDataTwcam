@@ -64,11 +64,12 @@ public class UtilsData {
 //		generateCodeDAOFactory(listIEntitys, pathPackageRepo);
 //		fenerateCodeJPADAOFactory(listIEntitys, pathPackageRepo);
 		
-		
-		try {
-			DataDAOFactory airDAOs = DataDAOFactory.getDAOFactory(TYPE.JPA);
-			File fileCSV;
-			BufferedReader br ;
+		DataDAOFactory airDAOs = DataDAOFactory.getDAOFactory(TYPE.JPA);
+		List<Flight> listFligth = airDAOs.getFlightDAO().findFligthsByDate(2020,7,10,"VLC","SEA",6);
+
+//		try {
+//			File fileCSV;
+//			BufferedReader br ;
 			
 //			Aerolineas
 //			fileCSV = new File("datasets-airlines.csv");
@@ -92,19 +93,19 @@ public class UtilsData {
 			
 			
 			//Personas
-			fileCSV = new File("datasets-nombres.csv");
-			br = new BufferedReader(new FileReader(fileCSV));
-			fileCSV = new File("datasets-apellidos.csv");
-			BufferedReader br2 = new BufferedReader(new FileReader(fileCSV));
-			insertarPersonas(airDAOs, br,br2);
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			fileCSV = new File("datasets-nombres.csv");
+//			br = new BufferedReader(new FileReader(fileCSV));
+//			fileCSV = new File("datasets-apellidos.csv");
+//			BufferedReader br2 = new BufferedReader(new FileReader(fileCSV));
+//			insertarPersonas(airDAOs, br,br2);
+//
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		
 		
@@ -218,7 +219,7 @@ public class UtilsData {
 				String originAirport = res[7];
 				String destinationAirport = res[8];
 				String boardingTime = res[10];
-				String departureTime = res[13];
+				String departureTime = res[13] == null || res[13].equals("") ? "0700" : res[13];
 				int airTime = res[16] !=  null && !res[16].equals("") ? Integer.parseInt(res[16]): 0;
 				float cost = (float) (50 + Math.random() * (700 - 50));
 				float boggageCost = (float) (50 + Math.random() * (150 - 50));

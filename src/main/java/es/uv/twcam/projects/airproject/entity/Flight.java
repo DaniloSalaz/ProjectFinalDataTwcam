@@ -11,12 +11,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+
 @Entity
 @Table(name = "Flights")
+@NamedQuery(
+		name = "Flight.findFlightsDate",
+		query = "Select f FROM "
+				+ "Flight f JOIN f.origin o JOIN f.destination d "
+				+ "WHERE f.year=?1 and f.month=?2 and f.day=?3 "
+				+ "and o.iata_code=?4 and d.iata_code=?5 and "
+				+ "f.availableSeats >= ?6 "
+				+ "ORDER BY f.departureTime ASC "
+		)
 public class Flight {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,22 +74,27 @@ public class Flight {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_airl_id", updatable = false)
+	@JsonIgnore
 	private Airline airline;
 
 	@OneToOne
 	@JoinColumn(name = "destination_airp_id", updatable = false)
 //	@JoinColumn(name = "desrination_airp_id",updatable = false)
+	@JsonIgnore
 	private Airport destination;
 
 	@OneToOne
 	@JoinColumn(name = "origin_airp_id",updatable = false)
+	@JsonIgnore
 	private Airport origin;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_airc_id", updatable = false)
+	@JsonIgnore
 	private Aircraft aircraft;
 	
 	@OneToMany(mappedBy = "flight")
+	@JsonIgnore
 	private List<Seat> seats;
 	
 

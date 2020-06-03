@@ -16,5 +16,7 @@ public interface IFlightDAO {
 
 	public void deleteFlight(Flight flight);
 
+	List<Flight> findFligthsByDate(int year, int month, int day, String iataOrigin, String iataDestination, int seats);
+
 
 }
