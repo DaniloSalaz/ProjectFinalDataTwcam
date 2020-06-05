@@ -5,10 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Person")
+@NamedQuery(
+		name="Person.findByDNI",
+		query = "Select p from Person p where p.dni=?1"
+		)
 public class Person {
 	
 	@Id
@@ -40,6 +45,16 @@ public class Person {
 		this.dni = dni;
 		this.name = name;
 		this.lastName = lastName;
+	}
+
+	public Person(int id, String dni, String name, String lastName, String address, String email) {
+		super();
+		this.id = id;
+		this.dni = dni;
+		this.name = name;
+		this.lastName = lastName;
+		this.address = address;
+		this.email = email;
 	}
 
 	public int getId() {
@@ -89,6 +104,11 @@ public class Person {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public static Person copyPerson(Person copyPerson) {
+		return new Person(copyPerson.getId(),copyPerson.getDni(),copyPerson.getName(),
+				copyPerson.getLastName(), copyPerson.getAddress(),copyPerson.getEmail());
+	}  
 	
 	
 }

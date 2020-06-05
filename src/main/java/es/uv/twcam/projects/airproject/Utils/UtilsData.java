@@ -64,59 +64,55 @@ public class UtilsData {
 //		generateCodeDAOFactory(listIEntitys, pathPackageRepo);
 //		fenerateCodeJPADAOFactory(listIEntitys, pathPackageRepo);
 		
-		DataDAOFactory airDAOs = DataDAOFactory.getDAOFactory(TYPE.JPA);
-		List<Flight> listFligth = airDAOs.getFlightDAO().findFligthsByDate(2020,7,10,"VLC","SEA",6);
 
-//		try {
-//			File fileCSV;
-//			BufferedReader br ;
+	}
+	
+	public static void cargarDatos() {
+		DataDAOFactory airDAOs = DataDAOFactory.getDAOFactory(TYPE.JPA);
+//		List<Flight> listFligth = airDAOs.getFlightDAO().findFligthsByDate(2020,7,10,"VLC","SEA",6);
+
+		try {
+			File fileCSV;
+			BufferedReader br ;
 			
 //			Aerolineas
-//			fileCSV = new File("datasets-airlines.csv");
-//			br = new BufferedReader(new FileReader(fileCSV));
-//			insertAirlines(airDAOs, br);
+			fileCSV = new File("datasets-airlines.csv");
+			br = new BufferedReader(new FileReader(fileCSV));
+			insertAirlines(airDAOs, br);
 			
 //			Aeropuertos
-//			fileCSV = new File("datasets-airports.csv");
-//			br = new BufferedReader(new FileReader(fileCSV));
-//			insertAirports(airDAOs, br);
+			fileCSV = new File("datasets-airports.csv");
+			br = new BufferedReader(new FileReader(fileCSV));
+			insertAirports(airDAOs, br);
 			
 			//Aviones
-//			fileCSV = new File("datasets-flights.csv");
-//			br = new BufferedReader(new FileReader(fileCSV));
-//			insertAircrafts(airDAOs, br);
+			fileCSV = new File("datasets-flights.csv");
+			br = new BufferedReader(new FileReader(fileCSV));
+			insertAircrafts(airDAOs, br);
 			
 //			//Vuelos
-//			fileCSV = new File("datasets-flights.csv");
-//			br = new BufferedReader(new FileReader(fileCSV));
-//			insertFlights(airDAOs, br);
+			fileCSV = new File("datasets-flights.csv");
+			br = new BufferedReader(new FileReader(fileCSV));
+			insertFlights(airDAOs, br);
 			
 			
 			//Personas
-//			fileCSV = new File("datasets-nombres.csv");
-//			br = new BufferedReader(new FileReader(fileCSV));
-//			fileCSV = new File("datasets-apellidos.csv");
-//			BufferedReader br2 = new BufferedReader(new FileReader(fileCSV));
-//			insertarPersonas(airDAOs, br,br2);
-//
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		
-		
-	   
+			fileCSV = new File("datasets-nombres.csv");
+			br = new BufferedReader(new FileReader(fileCSV));
+			fileCSV = new File("datasets-apellidos.csv");
+			BufferedReader br2 = new BufferedReader(new FileReader(fileCSV));
+			insertarPersonas(airDAOs, br,br2);
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
-//	public static void insertarReservaciones(DataDAOFactory airDAOs) {
-//		IReservationDAO reserRepo = airDAOs.getReservationDAO();
-//		Reservation reser = new Reservation(type, fligths)
-//		
-//	}
+	
 	public static void insertarPersonas(DataDAOFactory airDAOs, BufferedReader br, BufferedReader br2) throws IOException {
 		IPersonDAO personasRepo = airDAOs.getPersonDAO();
 		int dni1;

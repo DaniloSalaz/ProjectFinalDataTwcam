@@ -79,14 +79,13 @@ public class Reservation {
 
 
 
-	public Reservation(ReservationType type, int baggageNo, int prioriryNo, Person person, Payment payment,
+	public Reservation(ReservationType type, int baggageNo, int prioriryNo, Person person,
 			List<FlightReservation> flights, List<PassegerReservation> passeger, List<Seat> seatsReservation) {
 		super();
 		this.type = type;
 		this.baggageNo = baggageNo;
 		this.prioriryNo = prioriryNo;
 		this.person = person;
-		this.payment = payment;
 		this.flights = flights;
 		this.passeger = passeger;
 		this.seatsReservation = seatsReservation;

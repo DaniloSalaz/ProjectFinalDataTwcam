@@ -28,6 +28,9 @@ public class PassegerReservation {
 	
 	@Column(name = "passeger_ckeck_in")
 	private boolean checkIn;
+	
+	@Column(name = "pass_rese_seat")
+	private String seat;
 
 	
 	public PassegerReservation() {
@@ -38,6 +41,14 @@ public class PassegerReservation {
 		super();
 		this.idPassRese = idPassRese;
 		this.priority = priority;
+	}
+	
+
+	public PassegerReservation(Person passeger, boolean priority, boolean checkIn) {
+		super();
+		this.passeger = passeger;
+		this.priority = priority;
+		this.checkIn = checkIn;
 	}
 
 	public PassegerReservationId getIdPassRese() {
@@ -70,6 +81,14 @@ public class PassegerReservation {
 
 	public void setPasseger(Person passeger) {
 		this.passeger = passeger;
+	}
+
+	public String getSeat() {
+		return seat;
+	}
+
+	public void setSeat(String seat) {
+		this.seat = seat;
 	}
 	
 	

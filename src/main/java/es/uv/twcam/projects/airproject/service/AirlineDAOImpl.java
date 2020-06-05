@@ -3,8 +3,10 @@ package es.uv.twcam.projects.airproject.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import es.uv.twcam.projects.airproject.EntityException.AirlineNotFoundException;
 import es.uv.twcam.projects.airproject.entity.Airline;
 import es.uv.twcam.projects.airproject.repositoryDAO.DataDAOImpl;
 
@@ -40,9 +42,13 @@ public class AirlineDAOImpl extends DataDAOImpl<Integer,Airline> implements IAir
 
 	}
 	@Override
-	public Airline findAirlineByIATACode(String iataCode) {
+	public Airline findAirlineByIATACode(String iataCode) throws AirlineNotFoundException{
 		Query query = em.createNamedQuery("Airline.findByIATACode",Airline.class).setParameter(1, iataCode);
-		return (Airline) query.getSingleResult();
+		try {
+			return (Airline) query.getSingleResult();
+		} catch (NoResultException e) {
+			throw new AirlineNotFoundException("Airline wiht IATA: '" + iataCode + "' not found");
+		}
 	}
 
 }

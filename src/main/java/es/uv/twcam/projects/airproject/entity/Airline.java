@@ -11,6 +11,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Airlines")
 @NamedQuery(
@@ -31,6 +33,7 @@ public class Airline {
 	private String name;
 
 	@OneToMany(mappedBy = "airline")
+	@JsonIgnore
 	private List<Flight> flights;
 	
 	public Airline() {

@@ -28,8 +28,32 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 				+ "Flight f JOIN f.origin o JOIN f.destination d "
 				+ "WHERE f.year=?1 and f.month=?2 and f.day=?3 "
 				+ "and o.iata_code=?4 and d.iata_code=?5 and "
-				+ "f.availableSeats >= ?6 "
+				+ "f.availableSeats >= ?6 and f.reservationDate <= current_date() "
 				+ "ORDER BY f.departureTime ASC "
+		)
+@NamedQuery(
+		name = "Flight.findFlightsLTDate",
+		query = "Select f FROM "
+				+ "Flight f "
+				+ "WHERE f.year=?1 and f.month=?2 and f.day >=?3 "
+				+ "and f.reservationDate <= current_date() "
+				+ "ORDER BY f.availableSeats ASC"
+		)
+@NamedQuery(
+		name = "Flight.findFlightsGTDate",
+		query = "Select f FROM "
+				+ "Flight f "
+				+ "WHERE f.year=?1 and f.month=?2 and f.day >=?3 "
+				+ "and f.reservationDate <= current_date() "
+				+ "ORDER BY f.availableSeats ASC"
+		)
+@NamedQuery(
+		name = "Flight.findByFlightDate",
+		query = "Select f FROM "
+				+ "Flight f "
+				+ "WHERE f.year=?1 and f.month=?2 and f.day =?3 "
+				+ "and f.reservationDate <= current_date() "
+				+ "ORDER BY f.availableSeats ASC"
 		)
 public class Flight {
 	@Id
@@ -74,23 +98,19 @@ public class Flight {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_airl_id", updatable = false)
-	@JsonIgnore
 	private Airline airline;
 
 	@OneToOne
 	@JoinColumn(name = "destination_airp_id", updatable = false)
 //	@JoinColumn(name = "desrination_airp_id",updatable = false)
-	@JsonIgnore
 	private Airport destination;
 
 	@OneToOne
 	@JoinColumn(name = "origin_airp_id",updatable = false)
-	@JsonIgnore
 	private Airport origin;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_airc_id", updatable = false)
-	@JsonIgnore
 	private Aircraft aircraft;
 	
 	@OneToMany(mappedBy = "flight")

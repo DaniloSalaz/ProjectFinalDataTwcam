@@ -49,6 +49,13 @@ public class FlightReservation {
 		this.status =status;  
 	}
 
+	
+	public FlightReservation(Flight flight, Status status) {
+		super();
+		this.flight = flight;
+		this.status = status;
+	}
+
 	public FlightReservationId getId() {
 		return idFligRese;
 	}

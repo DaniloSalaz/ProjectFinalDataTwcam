@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import es.uv.twcam.projects.airproject.EntityException.AircraftNotFoundException;
 import es.uv.twcam.projects.airproject.entity.Aircraft;
 import es.uv.twcam.projects.airproject.repositoryDAO.DataDAOImpl;
 
@@ -40,9 +41,15 @@ public class AircraftDAOImpl extends DataDAOImpl<Integer,Aircraft> implements IA
 
 	}
 	@Override
-	public Aircraft findAircraftByName(String name) {
+	public Aircraft findAircraftByName(String name) throws AircraftNotFoundException{
 		Query query = em.createNamedQuery("Aircraft.findByName", Aircraft.class).setParameter(1, name);
-		return (Aircraft) query.getSingleResult();
+		try {
+			return (Aircraft) query.getSingleResult();
+		} catch (Exception e) {
+			String message = "Aircraft wiht name: " + name + " not found";
+			throw new AircraftNotFoundException(message);
+		}
+		
 	}
 
 }
