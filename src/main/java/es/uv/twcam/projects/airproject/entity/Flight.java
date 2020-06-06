@@ -88,7 +88,7 @@ public class Flight {
 	@Column(name = "flig_boarding_time")
 	private String boardingTime;
 
-	@Column(name = "flig_arrival_date")
+	@Column(name = "flig_arrival")
 	private LocalDateTime arrival;
 	
 	@Column(name = "flig_air_time")
