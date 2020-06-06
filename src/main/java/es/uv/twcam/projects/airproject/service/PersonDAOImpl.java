@@ -39,7 +39,7 @@ public class PersonDAOImpl extends DataDAOImpl<Integer,Person> implements IPerso
 
 	@Override
 	public Person findPersonByDNI(String dni) throws PersonNotFoundException {
-		Query query = em.createNamedQuery("Person.findByDNI",Person.class);
+		Query query = em.createNamedQuery("Person.findByDNI",Person.class).setParameter(1, dni);
 		try {
 			return (Person) query.getSingleResult();
 		} catch (NoResultException e) {

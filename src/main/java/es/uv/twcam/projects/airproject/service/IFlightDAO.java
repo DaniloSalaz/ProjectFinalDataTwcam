@@ -25,5 +25,7 @@ public interface IFlightDAO {
 
 	public Flight findFligthByDate(int year, int month, int day) throws FlightNotFoundException;
 
+	public List<Flight> findFlightStatus();
+
 
 }

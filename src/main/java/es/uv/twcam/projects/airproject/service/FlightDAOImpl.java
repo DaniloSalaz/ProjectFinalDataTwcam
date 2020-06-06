@@ -105,5 +105,16 @@ public class FlightDAOImpl extends DataDAOImpl<Integer,Flight> implements IFligh
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Flight> findFlightStatus() {
+		Query query = em.createNamedQuery("Flight.findByFlightStatus",Flight.class);
+		try {
+			return (List<Flight>) query.getResultList();
+		}catch(NoResultException ex){
+			throw new FlightNotFoundException();
+		}
+	}
+	
 
 }

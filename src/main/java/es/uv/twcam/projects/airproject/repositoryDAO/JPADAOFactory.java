@@ -14,6 +14,8 @@ import es.uv.twcam.projects.airproject.service.FlightDAOImpl;
 import es.uv.twcam.projects.airproject.service.IFlightDAO;
 import es.uv.twcam.projects.airproject.service.SeatDAOImpl;
 import es.uv.twcam.projects.airproject.service.ISeatDAO;
+import es.uv.twcam.projects.airproject.service.PaymentDAOImpl;
+import es.uv.twcam.projects.airproject.service.IPaymentDAO;
 import es.uv.twcam.projects.airproject.service.AirportDAOImpl;
 import es.uv.twcam.projects.airproject.service.IAirportDAO;
 import es.uv.twcam.projects.airproject.service.AirlineDAOImpl;
@@ -49,6 +51,11 @@ import es.uv.twcam.projects.airproject.service.IAirlineDAO;
 	@Override
 	public ISeatDAO getSeatDAO() {
 		return new SeatDAOImpl(getEntityManager());
+	}
+
+	@Override
+	public IPaymentDAO getPaymentDAO() {
+		return new PaymentDAOImpl(getEntityManager());
 	}
 
 	@Override

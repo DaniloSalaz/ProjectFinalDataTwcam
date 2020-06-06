@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -55,6 +57,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 				+ "and f.reservationDate <= current_date() "
 				+ "ORDER BY f.availableSeats ASC"
 		)
+@NamedQuery(
+		name = "Flight.findByFlightStatus",
+		query = "Select f FROM "
+				+ "Flight f JOIN f.reservations r ORDER BY f.status"
+		)
 public class Flight {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,6 +87,9 @@ public class Flight {
 	@Column(name = "flig_boarding_time")
 	private String boardingTime;
 
+	@Column(name = "flig_arrival_date")
+	private LocalDate arrival;
+	
 	@Column(name = "flig_air_time")
 	private int airTime;
 
@@ -98,11 +108,11 @@ public class Flight {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_airl_id", updatable = false)
+	@JsonIgnore
 	private Airline airline;
 
 	@OneToOne
 	@JoinColumn(name = "destination_airp_id", updatable = false)
-//	@JoinColumn(name = "desrination_airp_id",updatable = false)
 	private Airport destination;
 
 	@OneToOne
@@ -117,6 +127,17 @@ public class Flight {
 	@JsonIgnore
 	private List<Seat> seats;
 	
+	@OneToMany(mappedBy = "idFlight")
+	@JsonIgnore
+	private List<FlightReservation> reservations;
+	
+	@Column(name = "flig_status")
+	@Enumerated(EnumType.STRING)
+	private Status status;
+	
+	public enum Status {
+		scheduled, landed
+	}
 
 	public Flight() {
 
@@ -138,8 +159,8 @@ public class Flight {
 	
 
 	public Flight(LocalDate reservationDate, int year, int month, int day, String departureTime,
-			String boardingTime, int airTime, int availableSeats, float cost, float priorityCost, float baggageCost,
-			Airline airline, Airport destination, Airport origin, Aircraft aircraft) {
+			String boardingTime, LocalDate arrival, int airTime, int availableSeats, float cost, float priorityCost, float baggageCost,
+			Airline airline, Airport destination, Airport origin, Aircraft aircraft, Status status) {
 		super();
 		this.reservationDate = reservationDate;
 		this.year = year;
@@ -147,6 +168,7 @@ public class Flight {
 		this.day = day;
 		this.departureTime = departureTime;
 		this.boardingTime = boardingTime;
+		this.arrival = arrival;
 		this.airTime = airTime;
 		this.availableSeats = availableSeats;
 		this.cost = cost;
@@ -156,6 +178,7 @@ public class Flight {
 		this.destination = destination;
 		this.origin = origin;
 		this.aircraft = aircraft;
+		this.status = status;
 	}
 
 	public int getId() {
@@ -289,10 +312,42 @@ public class Flight {
 	@Override
 	public String toString() {
 		return String.format("{id: %s, FechaReservacion: %s, Año: %s, Mes: %s, Día: %s, HoraSalida: %s, HoraEmbarque: %s, TiempoVuelo: %s, Costo: %s, "
-				+ "costoPrioridad: %s, costoEquipajeExtra: %s, Aerolinea: %s, Destino: %s, Origen: %s, Avion: %s}", 
+				+ "costoPrioridad: %s, costoEquipajeExtra: %s, Aerolinea: %s, Destino: %s, Origen: %s, Avion: %s, Status: %s}", 
 				getId(),getReservationDate() ,getYear(), getMonth(), getDay(), getDepartureTime(), getBoardingTime(),getAirTime(), getCost(), getPriorityCost(), 
 				getBaggageCost(), getAirline().getName(), getDestination().getName(), getOrigin().getName(),
-				getAircraft().getName());
+				getAircraft().getName(), getStatus());
+	}
+
+	public List<Seat> getSeats() {
+		return seats;
+	}
+
+	public void setSeats(List<Seat> seats) {
+		this.seats = seats;
+	}
+
+	public List<FlightReservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<FlightReservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public LocalDate getArrival() {
+		return arrival;
+	}
+
+	public void setArrival(LocalDate arrival) {
+		this.arrival = arrival;
 	}
 	
 

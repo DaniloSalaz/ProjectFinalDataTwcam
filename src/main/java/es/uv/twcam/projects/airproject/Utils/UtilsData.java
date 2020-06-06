@@ -28,6 +28,7 @@ import es.uv.twcam.projects.airproject.entity.Aircraft;
 import es.uv.twcam.projects.airproject.entity.Airline;
 import es.uv.twcam.projects.airproject.entity.Airport;
 import es.uv.twcam.projects.airproject.entity.Flight;
+import es.uv.twcam.projects.airproject.entity.Flight.Status;
 import es.uv.twcam.projects.airproject.entity.Person;
 import es.uv.twcam.projects.airproject.entity.Reservation;
 import es.uv.twcam.projects.airproject.entity.Seat;
@@ -55,7 +56,8 @@ public class UtilsData {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			pathYaml = "prueba.yml";
 		}
-		
+
+		System.out.println("Hola Danilo");
 		
 //		System.out.println(air.getName());
 //		List<IEntityDAO> listIEntitys = parseFileYamltoEntity(pathYaml);
@@ -67,49 +69,56 @@ public class UtilsData {
 
 	}
 	
-	public static void cargarDatos() {
+	public static boolean cargarDatos(String path) {
 		DataDAOFactory airDAOs = DataDAOFactory.getDAOFactory(TYPE.JPA);
 //		List<Flight> listFligth = airDAOs.getFlightDAO().findFligthsByDate(2020,7,10,"VLC","SEA",6);
 
+		if(path == null || path.equals(""))
+			path = "";
+		
 		try {
 			File fileCSV;
 			BufferedReader br ;
 			
 //			Aerolineas
-			fileCSV = new File("datasets-airlines.csv");
+			fileCSV = new File(path + "datasets-airlines.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertAirlines(airDAOs, br);
 			
 //			Aeropuertos
-			fileCSV = new File("datasets-airports.csv");
+			fileCSV = new File(path + "datasets-airports.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertAirports(airDAOs, br);
 			
 			//Aviones
-			fileCSV = new File("datasets-flights.csv");
+			fileCSV = new File(path + "datasets-flights.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertAircrafts(airDAOs, br);
 			
 //			//Vuelos
-			fileCSV = new File("datasets-flights.csv");
+			fileCSV = new File(path + "datasets-flights.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertFlights(airDAOs, br);
 			
 			
 			//Personas
-			fileCSV = new File("datasets-nombres.csv");
+			fileCSV = new File(path + "datasets-nombres.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
-			fileCSV = new File("datasets-apellidos.csv");
+			fileCSV = new File(path + "datasets-apellidos.csv");
 			BufferedReader br2 = new BufferedReader(new FileReader(fileCSV));
 			insertarPersonas(airDAOs, br,br2);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
+		
+		return true;
 		
 	}
 	
@@ -204,12 +213,12 @@ public class UtilsData {
 		String st = "";
 		int count = 0;
 		try {
-			while((st = br.readLine()) != null && count < 1000) {
+			while((st = br.readLine()) != null && count < 100) {
 				String[] res = st.split(",");
 				LocalDate dateRes = LocalDate.now();
 //				int year = res[0] !=  null && !res[0].equals("") ? Integer.parseInt(res[0]): ;
 				int month =  (int) (1 + Math.random() * (12 - 1));//res[1] != null && !res[1].equals("") ? Integer.parseInt(res[1]): 5;
-				int day = month == 2 ? (int) (1 + Math.random() * (28 - 1)): (int) (1 + Math.random() * (28 - 1));//res[2] !=  null && res[2].equals("") ? Integer.parseInt(res[2]):10;
+				int day = month == 2 ? (int) (1 + Math.random() * (27 - 1)): (int) (1 + Math.random() * (28 - 1));//res[2] !=  null && res[2].equals("") ? Integer.parseInt(res[2]):10;
 				String codeAirline = res[4];
 				String codeAircraft = res[6];
 				String originAirport = res[7];
@@ -221,13 +230,14 @@ public class UtilsData {
 				float boggageCost = (float) (50 + Math.random() * (150 - 50));
 				float priorityCost = (float) (100 + Math.random() * (200 - 100));
 				
-				airportOrigin = count < 500 ? airportVLC: airpRepo.findAirportByIATACode(originAirport);
-				aiportDestin = count >= 500 ? airportVLC: airpRepo.findAirportByIATACode(destinationAirport);
+				LocalDate arrival = LocalDate.of(2020, month, day +1);
+				airportOrigin = count < 50 ? airportVLC: airpRepo.findAirportByIATACode(originAirport);
+				aiportDestin = count >= 50 ? airportVLC: airpRepo.findAirportByIATACode(destinationAirport);
 				airline = airlRepo.findAirlineByIATACode(codeAirline);
 				aircraft = aircRepo.findAircraftByName(codeAircraft);
 				
-				Flight flight =new Flight(dateRes, 2020 ,month,day,departureTime, boardingTime,airTime, 50, cost,priorityCost,
-						boggageCost, airline, aiportDestin,  airportOrigin, aircraft);
+				Flight flight =new Flight(dateRes, 2020 ,month,day,departureTime, boardingTime, arrival, airTime, 50, cost,priorityCost,
+						boggageCost, airline, aiportDestin,  airportOrigin, aircraft, Status.landed);
 				
 				fligRepo.createFlight(flight);
 				listFLights.add(flight);
@@ -272,8 +282,6 @@ public class UtilsData {
 				number++;
 			}
 		}
-		
-		
 		
 	}
 	public static void generateCodeIEntityDAO(List<IEntityDAO> listIEntytyDAO, String pathPackage) {

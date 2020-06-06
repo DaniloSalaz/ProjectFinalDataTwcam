@@ -30,3 +30,10 @@ ReservationDAO:
  - CRUD: Reservation
 SeatDAO:
  - CRUD: Seat
+PaymentDAO:
+ - CRUD: Payment
+PassegerReservationDAO:
+ - CRUD: PassegerReservation
+FlightReservationDAO:
+ - CRUD: FlightReservation
+ 

@@ -79,6 +79,19 @@ public class Seat {
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return String.format("{id: %s, code: %s, flight: %s, available: %s}", getId(), getCode(), getFlight().getId(), isAvailable());
+	}
+	
+	public static Seat copySeat(Seat obj) {
+		Seat seat = new Seat(obj.getCode(),obj.getFlight(),obj.isAvailable());
+		seat.setId(obj.getId());
+		return seat;
+	}
+	
 	
 	
 

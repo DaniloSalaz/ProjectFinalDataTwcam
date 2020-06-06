@@ -16,5 +16,11 @@ public interface IReservationDAO {
 
 	public void deleteReservation(Reservation reservation);
 
+	public Reservation findByFlight(int idFlight);
+
+	public Reservation findSeatsByFlight(int idFlight);
+
+	public Reservation findPassengerPriority();
+
 
 }

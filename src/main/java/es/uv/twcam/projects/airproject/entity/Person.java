@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table(name = "Person")
 @NamedQuery(
 		name="Person.findByDNI",
-		query = "Select p from Person p where p.dni=?1"
+		query = "Select p from Person p where p.dni= ?1"
 		)
 public class Person {
 	
@@ -47,9 +47,8 @@ public class Person {
 		this.lastName = lastName;
 	}
 
-	public Person(int id, String dni, String name, String lastName, String address, String email) {
+	public Person( String dni, String name, String lastName, String address, String email) {
 		super();
-		this.id = id;
 		this.dni = dni;
 		this.name = name;
 		this.lastName = lastName;
@@ -106,8 +105,11 @@ public class Person {
 	}
 	
 	public static Person copyPerson(Person copyPerson) {
-		return new Person(copyPerson.getId(),copyPerson.getDni(),copyPerson.getName(),
+		Person person =  new Person(copyPerson.getDni(),copyPerson.getName(),
 				copyPerson.getLastName(), copyPerson.getAddress(),copyPerson.getEmail());
+		
+		person.setId(copyPerson.getId());
+		return person;
 	}  
 	
 	

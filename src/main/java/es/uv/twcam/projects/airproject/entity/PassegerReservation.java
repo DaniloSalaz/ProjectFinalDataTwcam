@@ -1,27 +1,30 @@
 package es.uv.twcam.projects.airproject.entity;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Passeger_Reservation")
+@Table(name = "Passenger_Reservation")
+@IdClass(PassegerReservationId.class)
 public class PassegerReservation {
 
-	@EmbeddedId
-	private PassegerReservationId idPassRese;
+//	@EmbeddedId
+//	private PassegerReservationId idPassRese;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idPasseger")
-	private Person passeger;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "fk_pers_id")
+	private Person idPasseger;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idReservation")
-	private Reservation reservation;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "fk_rese_id")
+	private Reservation idReservation;
 	
 	@Column(name = "passenger_priority")
 	private boolean priority;
@@ -37,27 +40,24 @@ public class PassegerReservation {
 		super();
 	}
 
-	public PassegerReservation(PassegerReservationId idPassRese, boolean priority) {
+	public PassegerReservation(Person passeger, boolean priority, boolean checkIn) {
 		super();
-		this.idPassRese = idPassRese;
+		this.idPasseger = passeger;
 		this.priority = priority;
+		this.setCheckIn(checkIn);
 	}
 	
 
-	public PassegerReservation(Person passeger, boolean priority, boolean checkIn) {
+	public PassegerReservation(Person passeger, Reservation reservation, boolean priority, boolean checkIn,
+			String seat) {
 		super();
-		this.passeger = passeger;
+		this.idPasseger = passeger;
+		this.idReservation = reservation;
 		this.priority = priority;
-		this.checkIn = checkIn;
+		this.setCheckIn(checkIn);
+		this.seat = seat;
 	}
 
-	public PassegerReservationId getIdPassRese() {
-		return idPassRese;
-	}
-
-	public void setIdPassRese(PassegerReservationId idPassRese) {
-		this.idPassRese = idPassRese;
-	}
 
 	public boolean isPriority() {
 		return priority;
@@ -68,19 +68,19 @@ public class PassegerReservation {
 	}
 
 	public Reservation getReservation() {
-		return reservation;
+		return idReservation;
 	}
 
 	public void setReservation(Reservation reservation) {
-		this.reservation = reservation;
+		this.idReservation = reservation;
 	}
 
 	public Person getPasseger() {
-		return passeger;
+		return idPasseger;
 	}
 
 	public void setPasseger(Person passeger) {
-		this.passeger = passeger;
+		this.idPasseger = passeger;
 	}
 
 	public String getSeat() {
@@ -89,6 +89,14 @@ public class PassegerReservation {
 
 	public void setSeat(String seat) {
 		this.seat = seat;
+	}
+
+	public boolean isCheckIn() {
+		return checkIn;
+	}
+
+	public void setCheckIn(boolean checkIn) {
+		this.checkIn = checkIn;
 	}
 	
 	

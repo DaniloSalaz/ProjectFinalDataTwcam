@@ -2,18 +2,15 @@ package es.uv.twcam.projects.airproject.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 
-@Embeddable
+
+
 public class PassegerReservationId implements Serializable{
 
 	private static final long serialVersionUID = 6852825333058733446L;
 	
-	@Column(name = "fk_pers_id")
 	private int idPasseger;
 	
-	@Column(name = "fk_rese_id")
 	private int idReservation;
 
 
