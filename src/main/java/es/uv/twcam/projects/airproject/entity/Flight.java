@@ -1,6 +1,7 @@
 package es.uv.twcam.projects.airproject.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -88,7 +89,7 @@ public class Flight {
 	private String boardingTime;
 
 	@Column(name = "flig_arrival_date")
-	private LocalDate arrival;
+	private LocalDateTime arrival;
 	
 	@Column(name = "flig_air_time")
 	private int airTime;
@@ -159,7 +160,7 @@ public class Flight {
 	
 
 	public Flight(LocalDate reservationDate, int year, int month, int day, String departureTime,
-			String boardingTime, LocalDate arrival, int airTime, int availableSeats, float cost, float priorityCost, float baggageCost,
+			String boardingTime, LocalDateTime arrival, int airTime, int availableSeats, float cost, float priorityCost, float baggageCost,
 			Airline airline, Airport destination, Airport origin, Aircraft aircraft, Status status) {
 		super();
 		this.reservationDate = reservationDate;
@@ -342,11 +343,11 @@ public class Flight {
 		this.status = status;
 	}
 
-	public LocalDate getArrival() {
+	public LocalDateTime getArrival() {
 		return arrival;
 	}
 
-	public void setArrival(LocalDate arrival) {
+	public void setArrival(LocalDateTime arrival) {
 		this.arrival = arrival;
 	}
 	

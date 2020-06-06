@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,6 +68,9 @@ public class UtilsData {
 //		generateCodeDAOFactory(listIEntitys, pathPackageRepo);
 //		fenerateCodeJPADAOFactory(listIEntitys, pathPackageRepo);
 		
+		LocalDateTime arrival = LocalDateTime.of(2020, 10, 20 +1, 10,20);
+		System.out.println(arrival);
+		
 
 	}
 	
@@ -74,29 +79,29 @@ public class UtilsData {
 //		List<Flight> listFligth = airDAOs.getFlightDAO().findFligthsByDate(2020,7,10,"VLC","SEA",6);
 
 		if(path == null || path.equals(""))
-			path = "";
+			path = ".";
 		
 		try {
 			File fileCSV;
 			BufferedReader br ;
 			
 //			Aerolineas
-			fileCSV = new File(path + "datasets-airlines.csv");
+			fileCSV = new File(path + "/datasets-airlines.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertAirlines(airDAOs, br);
 			
 //			Aeropuertos
-			fileCSV = new File(path + "datasets-airports.csv");
+			fileCSV = new File(path + "/datasets-airports.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertAirports(airDAOs, br);
 			
 			//Aviones
-			fileCSV = new File(path + "datasets-flights.csv");
+			fileCSV = new File(path + "/datasets-flights.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertAircrafts(airDAOs, br);
 			
 //			//Vuelos
-			fileCSV = new File(path + "datasets-flights.csv");
+			fileCSV = new File(path + "/datasets-flights.csv");
 			br = new BufferedReader(new FileReader(fileCSV));
 			insertFlights(airDAOs, br);
 			
@@ -230,7 +235,7 @@ public class UtilsData {
 				float boggageCost = (float) (50 + Math.random() * (150 - 50));
 				float priorityCost = (float) (100 + Math.random() * (200 - 100));
 				
-				LocalDate arrival = LocalDate.of(2020, month, day +1);
+				LocalDateTime arrival = LocalDateTime.of(2020, month, day +1, 10,20);
 				airportOrigin = count < 50 ? airportVLC: airpRepo.findAirportByIATACode(originAirport);
 				aiportDestin = count >= 50 ? airportVLC: airpRepo.findAirportByIATACode(destinationAirport);
 				airline = airlRepo.findAirlineByIATACode(codeAirline);
